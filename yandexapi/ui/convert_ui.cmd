@@ -1,0 +1,1 @@
+pyuic5 main_ui.ui -o main_ui.py & pyuic5 settings_ui.ui -o settings_ui.py & pyuic5 item_widget_ui.ui -o item_widget_ui.py & exit

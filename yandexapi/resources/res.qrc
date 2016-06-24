@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>slowpoke.png</file>
+  </qresource>
+  <qresource prefix="fileicon">
+    <file>file.png</file>
+    <file>7zip.png</file>
+    <file>rar.png</file>
+    <file>zip.png</file>
+  </qresource>
+</RCC>
