@@ -7,7 +7,7 @@ from yandexapi.ui.settings_ui import Ui_Dialog
 
 
 class SettingsUI(QDialog, Ui_Dialog):
-    settings = pyqtSignal(dict)
+    settings_dict = pyqtSignal(dict)
 
     def __init__(self):
         super().__init__()
