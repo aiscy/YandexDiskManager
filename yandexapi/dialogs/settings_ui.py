@@ -1,12 +1,14 @@
 import os
 
-from PyQt5.QtCore import QSettings
+from PyQt5.QtCore import QSettings, pyqtSignal
 from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox
 
 from yandexapi.ui.settings_ui import Ui_Dialog
 
 
 class SettingsUI(QDialog, Ui_Dialog):
+    settings_updated = pyqtSignal(dict)
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -14,6 +16,7 @@ class SettingsUI(QDialog, Ui_Dialog):
         self.settings = QSettings('settings.ini', QSettings.IniFormat)
 
         self.toolButton.clicked.connect(lambda:self.lineEdit_watcher_folder.setText(QFileDialog.getExistingDirectory()))
+
 
     def isFirstRun(self):
         return self.settings.value('first_run', False)

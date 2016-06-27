@@ -90,6 +90,7 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept)
         self.buttonBox.rejected.connect(Dialog.reject)
+        self.lineEdit_API.textChanged['QString'].connect(self.label_2.setText)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.lineEdit_API, self.lineEdit_mail_error)
 
