@@ -64,11 +64,11 @@ class MainUI(QMainWindow, Ui_MainWindow):
                 thread = QThread()
 
                 listWidgetItem = self.addListWidgetItem()
-                worker.progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).setProgress)
-                worker.name.connect(self.listWidget.itemWidget(listWidgetItem).setName)
-                worker.status.connect(self.listWidget.itemWidget(listWidgetItem).setInfo)
-                worker.hide_progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).hideProgress)
-                worker.set_icon.connect(self.listWidget.itemWidget(listWidgetItem).setPixmap)
+                worker.progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).set_progress)
+                worker.name.connect(self.listWidget.itemWidget(listWidgetItem).set_name)
+                worker.status.connect(self.listWidget.itemWidget(listWidgetItem).set_info)
+                worker.hide_progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).hide_progress)
+                worker.set_icon.connect(self.listWidget.itemWidget(listWidgetItem).set_pixmap)
                 # worker.send_email.connect(self.send_mail)  # TODO разлочить
 
                 worker.moveToThread(thread)

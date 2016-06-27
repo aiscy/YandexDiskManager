@@ -11,7 +11,7 @@ class ItemListWidget(QWidget, Ui_Form):
         self.setupUi(self)
 
     @pyqtSlot(str)
-    def setPixmap(self, ext):
+    def set_pixmap(self, ext):
         if ext == '.zip':
             self.label.setPixmap(QPixmap(':/fileicon/zip.png'))
         elif ext == '.rar':
@@ -22,17 +22,17 @@ class ItemListWidget(QWidget, Ui_Form):
             self.label.setPixmap(QPixmap(':/fileicon/file.png'))
 
     @pyqtSlot(str)
-    def setName(self, name):
+    def set_name(self, name):
         self.label_name.setText(name)
 
     @pyqtSlot(str)
-    def setInfo(self, info):
+    def set_info(self, info):
         self.label_info.setText(info)
 
     @pyqtSlot(float)
-    def setProgress(self, value):
+    def set_progress(self, value):
         self.progressBar.setValue(value)
 
     @pyqtSlot()
-    def hideProgress(self):
+    def hide_progress(self):
         self.progressBar.hide()
