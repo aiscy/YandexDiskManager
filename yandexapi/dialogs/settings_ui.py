@@ -47,11 +47,11 @@ class SettingsUI(QDialog, Ui_Dialog):
             self.settings.setValue('folder', self.lineEdit_watcher_folder.text())
             self.settings.setValue('mail_error', self.lineEdit_mail_error.text())
             self.settings.setValue('mail_server', self.lineEdit_mail_server.text())
-            self.settings_updated()
+            self.update_settings()
 
             super().accept()
 
-    def settings_updated(self):
+    def update_settings(self):
         settings = {}
         for key in self.settings.allKeys():
             settings[key] = self.settings.value(key)
