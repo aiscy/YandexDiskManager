@@ -57,7 +57,7 @@ class SettingsUI(QDialog, Ui_Dialog):
         self.toolButton.clicked.connect(lambda:self.lineEdit_watcher_folder.setText(QFileDialog.getExistingDirectory()))
 
     def isFirstRun(self):
-        return True if self.settings.value('first_run') is None else False
+        return self.settings.value('first_run', False)
 
     def getAPIKey(self):
         return self.settings.value('api_key')
@@ -106,7 +106,7 @@ class MainUI(QMainWindow, Ui_MainWindow):
         self.settingsDialog = SettingsUI()
         # self.tray = QSystemTrayIcon()
         # self.queue = queue.Queue()
-        self.pool = QThreadPool()
+        self.pool = []
         # self.smtp = SMTP(self.settingsDialog.getMailServer())  # TODO разлочить
 
         self.firstRun()
@@ -147,15 +147,20 @@ class MainUI(QMainWindow, Ui_MainWindow):
         try:
             for file in files_list:
                 worker = WorkerYandexUpload(os.path.normpath(file), self.settingsDialog.getAPIKey())
-                listWidgetItem = self.addListWidgetItem()
-                worker.signals.progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).setProgress)
-                worker.signals.name.connect(self.listWidget.itemWidget(listWidgetItem).setName)
-                worker.signals.status.connect(self.listWidget.itemWidget(listWidgetItem).setInfo)
-                worker.signals.hide_progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).hideProgress)
-                worker.signals.set_icon.connect(self.listWidget.itemWidget(listWidgetItem).setPixmap)
-                # worker.signals.send_email.connect(self.send_mail)  # TODO разлочить
+                thread = QThread()
 
-                self.pool.start(worker)
+                listWidgetItem = self.addListWidgetItem()
+                worker.progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).setProgress)
+                worker.name.connect(self.listWidget.itemWidget(listWidgetItem).setName)
+                worker.status.connect(self.listWidget.itemWidget(listWidgetItem).setInfo)
+                worker.hide_progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).hideProgress)
+                worker.set_icon.connect(self.listWidget.itemWidget(listWidgetItem).setPixmap)
+                # worker.send_email.connect(self.send_mail)  # TODO разлочить
+
+                worker.moveToThread(thread)
+                thread.started.connect(worker.run)
+                thread.start()
+
                 logging.debug('Создан новый работник')
         except Exception as e:
             logging.debug(e)
