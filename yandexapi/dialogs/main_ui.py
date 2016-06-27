@@ -17,7 +17,7 @@ class MainUI(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
-        self.settingsDialog = SettingsUI()
+        self.settings_dialog = SettingsUI()
         # self.tray = QSystemTrayIcon()
         # self.queue = queue.Queue()
         self.pool = []
@@ -44,12 +44,12 @@ class MainUI(QMainWindow, Ui_MainWindow):
 
 
     def setup_top_menu(self):
-        self.settings_menu.triggered.connect(self.settingsDialog.exec)
+        self.settings_menu.triggered.connect(self.settings_dialog.exec)
         self.quit_menu.triggered.connect(self.shutdown)
 
     def setup_worker_new_task(self):
         self.thread_new_task = QThread()
-        self.worker_new_task = WorkerNewTask(self.settingsDialog.getFolder())
+        self.worker_new_task = WorkerNewTask(self.settings_dialog.getFolder())
 
         self.worker_new_task.new_files.connect(self.start_pool_workers)
         self.worker_new_task.moveToThread(self.thread_new_task)
@@ -60,7 +60,7 @@ class MainUI(QMainWindow, Ui_MainWindow):
     def start_pool_workers(self, files_list):
         try:
             for file in files_list:
-                worker = WorkerYandexUpload(os.path.normpath(file), self.settingsDialog.getAPIKey())
+                worker = WorkerYandexUpload(os.path.normpath(file), self.settings_dialog.getAPIKey())
                 thread = QThread()
 
                 list_widget_item = self.add_list_widget_item()
@@ -87,6 +87,6 @@ class MainUI(QMainWindow, Ui_MainWindow):
         qApp.quit()
 
     def first_run(self):
-        if self.settingsDialog.isFirstRun():
-            if self.settingsDialog.exec() == QDialog.Rejected:
+        if self.settings_dialog.isFirstRun():
+            if self.settings_dialog.exec() == QDialog.Rejected:
                 sys.exit(0)  # TODO
