@@ -23,47 +23,47 @@ class MainUI(QMainWindow, Ui_MainWindow):
         self.pool = []
         # self.smtp = SMTP(self.settingsDialog.getMailServer())  # TODO разлочить
 
-        self.firstRun()
-        self.setupTopMenu()
+        self.first_run()
+        self.setup_top_menu()
         self.show()
-        self.setupWorkerNewTask()
-        self.mainThread()
+        self.setup_worker_new_task()
+        self.main_thread()
 
-    def mainThread(self):
+    def main_thread(self):
         logging.info('Запущен главный процесс')
 
-    def addListWidgetItem(self):
-        myCustomWidget = ItemListWidget()
+    def add_list_widget_item(self):
+        my_custom_widget = ItemListWidget()
 
-        myQListWidgetItem = QListWidgetItem()
-        myQListWidgetItem.setSizeHint(myCustomWidget.sizeHint())
+        my_qlist_widget_item = QListWidgetItem()
+        my_qlist_widget_item.setSizeHint(my_custom_widget.sizeHint())
 
-        self.listWidget.insertItem(0, myQListWidgetItem)
-        self.listWidget.setItemWidget(myQListWidgetItem, myCustomWidget)
-        return myQListWidgetItem
+        self.listWidget.insertItem(0, my_qlist_widget_item)
+        self.listWidget.setItemWidget(my_qlist_widget_item, my_custom_widget)
+        return my_qlist_widget_item
 
 
-    def setupTopMenu(self):
+    def setup_top_menu(self):
         self.settings_menu.triggered.connect(self.settingsDialog.exec)
         self.quit_menu.triggered.connect(self.shutdown)
 
-    def setupWorkerNewTask(self):
-        self.threadNewTask = QThread()
-        self.workerNewTask = WorkerNewTask(self.settingsDialog.getFolder())
+    def setup_worker_new_task(self):
+        self.thread_new_task = QThread()
+        self.worker_new_task = WorkerNewTask(self.settingsDialog.getFolder())
 
-        self.workerNewTask.new_files.connect(self.startPoolWorkers)
-        self.workerNewTask.moveToThread(self.threadNewTask)
-        self.threadNewTask.started.connect(self.workerNewTask.run)
-        self.threadNewTask.start()
+        self.worker_new_task.new_files.connect(self.start_pool_workers)
+        self.worker_new_task.moveToThread(self.thread_new_task)
+        self.thread_new_task.started.connect(self.worker_new_task.run)
+        self.thread_new_task.start()
 
     @pyqtSlot(list)
-    def startPoolWorkers(self, files_list):
+    def start_pool_workers(self, files_list):
         try:
             for file in files_list:
                 worker = WorkerYandexUpload(os.path.normpath(file), self.settingsDialog.getAPIKey())
                 thread = QThread()
 
-                listWidgetItem = self.addListWidgetItem()
+                listWidgetItem = self.add_list_widget_item()
                 worker.progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).set_progress)
                 worker.name.connect(self.listWidget.itemWidget(listWidgetItem).set_name)
                 worker.status.connect(self.listWidget.itemWidget(listWidgetItem).set_info)
@@ -86,7 +86,7 @@ class MainUI(QMainWindow, Ui_MainWindow):
     def shutdown(self):  # TODO
         qApp.quit()
 
-    def firstRun(self):
+    def first_run(self):
         if self.settingsDialog.isFirstRun():
             if self.settingsDialog.exec() == QDialog.Rejected:
                 sys.exit(0)  # TODO
