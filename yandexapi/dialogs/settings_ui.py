@@ -7,16 +7,14 @@ from yandexapi.ui.settings_ui import Ui_Dialog
 
 
 class SettingsUI(QDialog, Ui_Dialog):
-    settings_updated = pyqtSignal(dict)
+    settings = pyqtSignal(dict)
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
         self.settings = QSettings('settings.ini', QSettings.IniFormat)
-
         self.toolButton.clicked.connect(lambda:self.lineEdit_watcher_folder.setText(QFileDialog.getExistingDirectory()))
-
 
     def isFirstRun(self):
         return self.settings.value('first_run', False)
@@ -49,6 +47,7 @@ class SettingsUI(QDialog, Ui_Dialog):
             self.settings.setValue('folder', self.lineEdit_watcher_folder.text())
             self.settings.setValue('mail_error', self.lineEdit_mail_error.text())
             self.settings.setValue('mail_server', self.lineEdit_mail_server.text())
+
 
             super().accept()
 
