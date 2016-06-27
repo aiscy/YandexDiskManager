@@ -29,6 +29,8 @@ class ItemListWidget(QWidget, Ui_Form):
             self.label.setPixmap(QPixmap(':/fileicon/rar.png'))
         elif ext == '.7z':
             self.label.setPixmap(QPixmap(':/fileicon/7zip.png'))
+        else:
+            self.label.setPixmap(QPixmap(':/fileicon/file.png'))
 
     @pyqtSlot(str)
     def setName(self, name):
