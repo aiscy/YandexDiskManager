@@ -63,12 +63,12 @@ class MainUI(QMainWindow, Ui_MainWindow):
                 worker = WorkerYandexUpload(os.path.normpath(file), self.settingsDialog.getAPIKey())
                 thread = QThread()
 
-                listWidgetItem = self.add_list_widget_item()
-                worker.progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).set_progress)
-                worker.name.connect(self.listWidget.itemWidget(listWidgetItem).set_name)
-                worker.status.connect(self.listWidget.itemWidget(listWidgetItem).set_info)
-                worker.hide_progress_bar.connect(self.listWidget.itemWidget(listWidgetItem).hide_progress)
-                worker.set_icon.connect(self.listWidget.itemWidget(listWidgetItem).set_pixmap)
+                list_widget_item = self.add_list_widget_item()
+                worker.progress_bar.connect(self.listWidget.itemWidget(list_widget_item).set_progress)
+                worker.name.connect(self.listWidget.itemWidget(list_widget_item).set_name)
+                worker.status.connect(self.listWidget.itemWidget(list_widget_item).set_info)
+                worker.hide_progress_bar.connect(self.listWidget.itemWidget(list_widget_item).hide_progress)
+                worker.set_icon.connect(self.listWidget.itemWidget(list_widget_item).set_pixmap)
                 # worker.send_email.connect(self.send_mail)  # TODO разлочить
 
                 worker.moveToThread(thread)
